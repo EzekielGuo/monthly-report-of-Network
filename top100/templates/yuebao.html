@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>月报</title>
+    <style>
+        *{
+            font-weight: 300;
+        }
+        h1{
+            text-align: center;
+        }
+        td{
+            text-align: center;
+        }
+        .div{
+            width: 90%;
+            margin: 0 auto;
+        }
+        .div1_table2{
+            margin: 20px 0 0 0;
+        }
+        table{
+            width: 100%;
+        }
+        .div2_img{
+            width: 100%;
+            /*height: 200px;*/
+        }
+        img{
+            /*display: block;*/
+            width: 50%;
+            height: 200px;
+            margin-bottom: 10px;
+            float: left;
+        }
+        h4 span{
+            font-size: 12px;
+        }
+        .clear{
+            clear:both;
+        }
+        .div5{
+            margin-bottom: 200px;
+        }
+    </style>
+</head>
+<body>
+<!--<table>-->
+    <!--<caption>TOP100 客户网络运行月报-12月</caption>-->
+    <!--<tr>-->
+        <!---->
+    <!--</tr>-->
+<!--</table>-->
+<h1>{{ custname }}</h1>
+<h1>网络运行月报——{{ year }}年{{ month }}月</h1>
+<div class="div div1">
+    <h4>客户资源描述</h4>
+    <h4>客户名称：{{ custname }}</h4>
+    <table border="1" cellspacing="0" cellpadding="0">
+        <tr>
+            <th>接口人</th>
+            <th>接口人类型</th>
+        </tr>
+        <tr>
+        {% for person in person_list %}
+        <tr>
+            <td>
+                {% if person.name == "" %}
+                    -
+                {% else %}
+                    {{ person.name }}
+                {% endif %}
+            </td>
+            <td>
+                {% if person.type == "" %}
+                    -
+                {% elif person.type == "SA" %}
+                    销售
+                {% elif person.type == "KF" %}
+                    客服
+                {% else %}
+                    {{ person.type }}
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <table border="1" cellspacing="0" cellpadding="0" class="div1_table2">
+        <tr>
+            <th width="20%">端口</th>
+            <th width="20%">设备</th>
+            <th width="20%">IP地址</th>
+            <th width="15%">网络产品</th>
+            <th width="15%">合同带宽</th>
+        </tr>
+        {% for port in port_list %}
+        <tr>
+            <td>
+                {% if port.port_desc == "" or port.port_desc == None %}
+                    -
+                {% else %}
+                    {{ port.port_desc }}
+                {% endif %}
+            </td>
+            <td>
+                {% if port.wl_device_name == "" or port.wl_device_name == None %}
+                    -
+                {% else %}
+                    {{ port.wl_device_name }}
+                {% endif %}
+            </td>
+            <td>
+                {% if port.iprange == "" or port.iprange == None %}
+                    -
+                {% else %}
+                    {{ port.iprange }}
+                {% endif %}
+            </td>
+            <!--<td>{{ port.procontent }}</td>-->
+            <td>
+                {% if port.procontent == "" or port.procontent == None %}
+                    -
+                {% else %}
+                    {{ port.procontent }}
+                {% endif %}
+            </td>
+            <!--<td>{{ port.bandwidth }}</td>-->
+            <td>
+                {% if port.bandwidth == "" or port.bandwidth == None %}
+                    -
+                {% else %}
+                    {{ port.bandwidth }}
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div class="div div2">
+    <h4>客户月流量图</h4>
+    <div class="div2_img">
+        {% for graphid in graphid_list  %}
+            <img id="imgs" src="http://ip/sy/curl_month1.php?local_graph_id={{ graphid }}&graph_start={{ start_timestamp }}&graph_end={{ end_timestamp }}" />
+            <!--<p>http://ip/sy/curl_month1.php?local_graph_id={{ graphid }}&graph_start={{ start_timestamp }}&graph_end={{ end_timestamp }}</p>-->
+        {% endfor %}
+        <!--http://ip/sy/curl_month.php?local_graph_id=13070-->
+    </div>
+</div>
+<div class="clear"></div>
+<div class="div div3">
+    <!--<h4>客户带宽月使用率：% （月平均/合同带宽）</h4>-->
+    <!--<h4>端口可用率：%-->
+        <!--&nbsp&nbsp&nbsp&nbsp-->
+        <!--<span>计算方式：1-(中断时长/2592000)</span>-->
+    <!--</h4>-->
+    <!--<h4>&nbsp;</h4>-->
+</div>
+
+<div class="div div4">
+    <h4>端口中断时间</h4>
+    <table border="1" cellspacing="0" cellpadding="0">
+        <tr>
+            <th>设备端口</th>
+            <th>中断时间</th>
+            <th>恢复时间</th>
+            <th>时长</th>
+            <th>月可用率(%)</th>
+        </tr>
+        {% for search in search_list %}
+        <tr>
+            <td>
+                {% if search.name == "" or search.name == None %}
+                    无
+                {% else %}
+                    {{ search.name }}
+                {% endif %}
+                <br>
+                {% if search.port == "" or search.port == None %}
+                    无
+                {% else %}
+                    {{ search.port }}
+                {% endif %}
+            </td>
+            <td>
+                {% if search.downtime == "" or search.downtime == None %}
+                    无
+                {% else %}
+                    {{ search.downtime }}
+                {% endif %}
+                <!--{% for detail in search.detail %}-->
+                    <!--&lt;!&ndash;{{ info.downtime }} &ndash;&gt;-->
+                    <!--{% if detail.downtime == "" or detail.downtime == None %}-->
+                        <!--无-->
+                    <!--{% else %}-->
+                        <!--{{ detail.downtime }}-->
+                    <!--{% endif %}-->
+                <!--<br>-->
+                <!--{% endfor %}-->
+            </td>
+            <td>
+                {% if search.uptime == "" or search.uptime == None %}
+                    无
+                {% else %}
+                    {{ search.uptime }}
+                {% endif %}
+                <!--{% for detail in search.detail %}-->
+                    <!--&lt;!&ndash;{{ info.uptime }} &ndash;&gt;-->
+                    <!--{% if detail.uptime == "" or detail.uptime == None %}-->
+                        <!--无-->
+                    <!--{% else %}-->
+                        <!--{{ detail.uptime }}-->
+                    <!--{% endif %}-->
+                <!--<br>-->
+                <!--{% endfor %}-->
+            </td>
+            <td>
+                {% if search.duration == "" or search.duration == None %}
+                    无
+                {% else %}
+                    {{ search.duration }}
+                {% endif %}
+                <!--{% for detail in search.detail %}-->
+                    <!--&lt;!&ndash;{{ info.duration }} &ndash;&gt;-->
+                    <!--{% if detail.duration == "" or detail.duration == None %}-->
+                        <!--无-->
+                    <!--{% else %}-->
+                        <!--{{ detail.duration }}-->
+                    <!--{% endif %}-->
+                <!--<br>-->
+                <!--{% endfor %}-->
+            </td>
+            <td>
+                {% if search.ratio == "" or search.ratio == None %}
+                    100.0
+                {% else %}
+                    {{ search.ratio }}
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+<div class="div div5">
+    <h4>攻击次数/流量/月</h4>
+    <table border="1" cellspacing="0" cellpadding="0">
+        <tr>
+            <th>设备端口</th>
+            <!--<th>IP地址</th>-->
+            <th>开始时间</th>
+            <th>持续时长(S)</th>
+            <th>攻击流量(G)</th>
+            <th>采取措施</th>
+        </tr>
+        <tr>
+            <td>无</td>
+            <!--<td>无</td>-->
+            <td>无</td>
+            <td>无</td>
+            <td>无</td>
+            <td>无</td>
+        </tr>
+    </table>
+</div>
+
+</body>
+</html>
